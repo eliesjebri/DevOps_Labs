@@ -5,7 +5,7 @@ directory="/root/DevOps_Labs/Ansible/RH_Ansible_Labs"
 files="$directory/*"
 
 # Loop over each file in the directory
-for file in $files; do
+for file in $directory/*; do
   # Use sed to substitute the desired strings
   echo "$file\n"
   sed -i 's/node1/host01/g' "$file" ; echo "node1 done\n"
