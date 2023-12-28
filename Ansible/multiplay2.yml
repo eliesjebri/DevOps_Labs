@@ -1,0 +1,74 @@
+---
+# handlers includes debug
+#################################################
+##               Apache                         #
+#################################################
+- name: Install start and enaible Apache
+  hosts: host01
+  tasks:
+  - name: Includes service package and state Varaibles for Apache
+    include_vars: vars/apachevars.yml
+
+  - debug:
+      msg: Chargement des variables pour Apache
+
+  - name: Include install and start tasks
+    include: tasks/instruntask.yml
+    register: output
+# add lineinfile to index.html then call handler restart
+  - name: Add index.html to DocumentRoot
+    lineinfile:
+      dest: /var/www/html/index.html
+      line: "{{ service }} is running"
+      create: yes
+    register: output
+    notify: restart {{ service }}
+  - debug:
+      var: output
+  - debug:
+      var: output
+
+  - name: Ensure the webserver is reachable
+    uri:
+      url: http://{{ ansible_hostname }}
+      status_code: 200
+    register: link
+  - debug:
+      var: link
+#################################################
+#               Mariadb                         #
+#################################################
+- name: Install start and enable Mariadb
+  hosts: host01
+#  debugger: on_skipped
+  tasks:
+  - name: Includes service package and state Varaibles for Mariadb
+    include_vars: vars/mariadbvars.yml
+  - name: Include install and start tasks
+    include: tasks/instruntask.yml
+# Configurer la base
+  - name: creer la base de donnee
+    mysql_db:
+      name: "{{ dbname }}"
+      state: present
+  - name: creer un utilisateur
+    mysql_user:
+      name: "{{ dbuser }}"
+      password: "{{ upassword }}"
+      priv: "*.*:ALL "
+      host: "localhost"
+      state: present
+
+# add lineinfile to index.html then call handler restart
+  - name: Add bind-address to [mysqld] section in my.cnf file
+    lineinfile:
+      dest: /etc/my.cnf
+      insertafter: '^\[mysqld\]'
+      line: bind-address = 127.0.0.1
+    notify: restart {{ service }}
+
+  handlers:
+    - name: restart {{ service }}
+      service:
+        name: "{{ service }}"
+        state: restarted
