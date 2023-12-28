@@ -1,0 +1,24 @@
+---
+# This is a simple playbook with two plays
+- name: first play
+  hosts: host01
+  tasks:
+    - name: first task
+      yum:
+        name: httpd
+        state: present
+    - name: second task
+      systemd:
+        name: httpd
+        enabled: true
+- name: second play
+  hosts: host02
+  tasks:
+    - name: first task
+      yum:
+        name: mariadb-server
+        state: present
+    - name: second task
+      systemd:
+        name: mariadb
+        enabled: true
