@@ -1,0 +1,9 @@
+---
+- name: Add newbie user to hosts_nodes group
+  hosts: hosts_nodes
+  tasks:
+    - name: newbie exists with UID 4000
+      user:
+        name: newbie
+        uid: 4000
+        state: present
