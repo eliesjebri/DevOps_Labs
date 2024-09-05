@@ -1,0 +1,25 @@
+---
+# handlers includes debug
+- name: Install start and enable services
+  hosts: all
+  tasks:
+    - name: Include the install & start Apache
+      include: tasks/instruntask.yml
+    yum:
+        name: httpd
+        status: present
+    - name: second task
+      service:
+        name: httpd
+        enabled: true
+- name: second play
+  hosts: host02
+  tasks:
+    - name: first task
+      yum:
+        name: mariadb
+        status: present
+    - name: second task
+      service:
+        name: mariadb
+        enabled: true

@@ -1,0 +1,26 @@
+---
+- name: Configure important user consistently
+  hosts: hosts_nodes
+  vars_files:
+     - ./my_vars.yml
+
+  tasks:
+    - name: Print Memory and CPU Cores
+      debug:
+        msg: >
+          "Host {{ ansible_hostname }} 
+          has {{ ansible_memtotal_mb }} MB Memory 
+          and {{ ansible_processor_cores }} CPU Cores."
+
+    - name: newbie exists with UID 4000
+      user:
+        name: "{{ username }}"
+        uid: 4000
+        state: present
+
+    - name: Add message to /etc/issue file
+      lineinfile:
+        dest: /etc/issue
+        line: "{{ username }} user added"
+        create: yes
+        state: present

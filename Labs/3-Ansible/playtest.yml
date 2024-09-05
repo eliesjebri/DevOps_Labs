@@ -1,0 +1,14 @@
+---
+- name: Install start and enable services
+  hosts: all
+  tasks:
+  - name: Includes the tasks file and defines the variables
+    include: environment.yml
+    vars:
+      package: mariadb-server
+      service: mariadb
+      state: started
+    register: output
+- name: Debugs the included tasks
+  debug:
+    var: output

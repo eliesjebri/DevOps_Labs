@@ -1,0 +1,22 @@
+---
+# handlers includes debug
+- name: Install start and enable services
+  hosts: all
+  tasks:
+  - name: Includes the install start Apache
+    include_vars: vars/apachevars.yml
+    include: tasks/instruntask.yml
+    register: output
+# add lineinfile to index.html then call handler restart
+
+  handlers:
+    - name: restart {{ service }}
+      systemd:
+	    name: {{ service }}
+		state: restarted
+
+
+
+- name: Debugs the included tasks
+  debug:
+    var: output

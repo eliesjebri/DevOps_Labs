@@ -1,0 +1,16 @@
+---
+- name: Configure important user consistently
+  hosts: hosts_nodes
+  tasks:
+    - name: newbie exists with UID 4000
+      user:
+        name: "{{ username }}"
+        uid: 4000
+        state: present
+
+    - name: Add message to /etc/issue file
+      lineinfile:
+        dest: /tmp/{{ username }}
+        line: "{{ username }} user added"
+        create: yes
+        state: present

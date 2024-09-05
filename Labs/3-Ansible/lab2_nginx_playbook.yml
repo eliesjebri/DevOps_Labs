@@ -1,0 +1,29 @@
+---
+- name: Configure webserver with nginx
+  hosts: host02
+  become: true
+
+  tasks:
+    - name: Install nginx
+      yum:
+        name: "nginx"
+        update_cache: no
+        state: present
+
+    - name: copy nginx config file
+      copy:
+        src: 'files/nginx.conf'
+        dest: '/etc/nginx/'
+        force: yes
+
+    - name: copy index.html file
+      copy:
+        src: 'files/index.html'
+        dest: '/usr/share/nginx/html'
+        force: yes
+
+    - name: restart nginx
+      systemd:
+        name: nginx
+        state: restarted
+        enabled: yes

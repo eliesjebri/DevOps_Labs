@@ -1,0 +1,12 @@
+---
+- name: Vhosts Templale Example
+  hosts: host01
+  tasks:
+  - name: Includes doc_root Varaibles for Apache
+    include_vars: vars/sitesvars.yml
+  
+  - name: Change default Apache virtual host
+    template:
+      src: vhosts.j2
+      dest: /etc/httpd/conf.d/{{ item }}
+    with_items: "{{ doc_root }}"
