@@ -1,0 +1,36 @@
+Vagrant.configure("2") do |config|
+  # Configuration globale pour toutes les machines
+  config.vm.box = "centos/stream9"
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "512" # Ajustez si nécessaire
+    vb.cpus = 1
+  end
+
+  # Configuration de la machine master01
+  config.vm.define "master01" do |master|
+    master.vm.hostname = "master01"
+    master.vm.network "private_network", ip: "10.20.30.10"
+    master.vm.network "forwarded_port", guest: 22, host: 2220
+  end
+
+  # Configuration de la machine host01
+  config.vm.define "host01" do |host1|
+    host1.vm.hostname = "host01"
+    host1.vm.network "private_network", ip: "10.20.30.11"
+    host1.vm.network "forwarded_port", guest: 22, host: 2221
+  end
+
+  # Configuration de la machine host02
+  config.vm.define "host02" do |host2|
+    host2.vm.hostname = "host02"
+    host2.vm.network "private_network", ip: "10.20.30.12"
+    host2.vm.network "forwarded_port", guest: 22, host: 2222
+  end
+
+  # Configuration de la machine host03
+  config.vm.define "host03" do |host3|
+    host3.vm.hostname = "host03"
+    host3.vm.network "private_network", ip: "10.20.30.13"
+    host3.vm.network "forwarded_port", guest: 22, host: 2223
+  end
+end
